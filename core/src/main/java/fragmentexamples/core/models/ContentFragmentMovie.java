@@ -1,12 +1,17 @@
 package fragmentexamples.core.models;
 
+import java.util.*;
+
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.FragmentData;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.commons.lang.StringUtils;
-import java.util.Optional;
+
+import java.util.stream.Collectors;
+
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import javax.annotation.PostConstruct;
@@ -47,11 +52,12 @@ public class ContentFragmentMovie {
 				.orElse(StringUtils.EMPTY);
 	}
 
-	public String getReleaseDate() {
-	    return contentFragment
+	public Calendar getReleaseDate() {
+	    return ((Calendar) contentFragment
 				.map(cf -> cf.getElement("releaseDate"))
-				.map(ContentElement::getContent)
-				.orElse(StringUtils.EMPTY);
+				.map(ContentElement::getValue)
+				.map(FragmentData::getValue)
+				.orElse(StringUtils.EMPTY));
 	}
 
     public String getImdbProfile() {
@@ -64,8 +70,21 @@ public class ContentFragmentMovie {
 
 	public String getImage() {
 	    return contentFragment
-				.map(cf -> cf.getElement("image"))
+				.map(cf -> cf.getElement("heroImage"))
 				.map(ContentElement::getContent)
 				.orElse(StringUtils.EMPTY);
+	}
+
+	public List<ContentFragmentActor> getActors() {
+		return Arrays.asList((String[]) contentFragment
+				.map(cf -> cf.getElement("actors"))
+				.map(ContentElement::getValue)
+				.map(FragmentData::getValue)
+				.orElse(new String[0]))
+				.stream()
+				.map(actorPath -> resource.getResourceResolver().resolve(actorPath))
+				.filter(Objects::nonNull)
+				.map(actorResource -> actorResource.adaptTo(ContentFragmentActor.class))
+				.collect(Collectors.toList());
 	}
 }
