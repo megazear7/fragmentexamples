@@ -1,8 +1,14 @@
 <sly data-sly-use.movieList="fragmentexamples.core.models.MovieListModel" />
 
-<h3>Your list of movies:</h3>
+<p data-sly-test="${!movieList.movies}">
+  Please author the movie list component.
+</p>
+
 <ul data-sly-list.movie="${movieList.movies}">
   <li>
-    <a href="${movie.imdbProfile}">${movie.title}</a>
+    <a href="${movie.imdbProfile}">
+      <img src="${movie.image}">
+      <h5>${movie.title}</h5>
+    </a>
   </li>
 </ul>
