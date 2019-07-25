@@ -1,0 +1,20 @@
+.fragmentexamples-clean .cmp-contentfragment__element-value {
+  margin: 1rem 0 0 0;
+}
+
+.fragmentexamples-clean .cmp-contentfragment__element--title {
+  font-size: 1.5rem;
+}
+
+.fragmentexamples-clean .cmp-contentfragment__element--description {
+  font-style: italic;
+  color: grey;
+}
+
+.fragmentexamples-clean .cmp-contentfragment__element-title {
+  display: none;
+}
+
+.fragmentexamples-clean .cmp-contentfragment__title {
+  display: none;
+}
